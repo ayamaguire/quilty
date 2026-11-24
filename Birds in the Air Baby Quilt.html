@@ -1,0 +1,159 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Birds in the Air Baby Quilt</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=Inter:wght@400;500&display=swap">
+<style>
+/* Layout: single narrow column, quilt editor first, cutting notes after */
+:root{
+  --bg:#f3f5f8; --surface:#ffffff; --fg:#1b2240; --muted:#5b6382; --line:#d9dde8;
+  --accent:#2f8f8a; --accent-soft:#dff0ee; --sel:#2f7be0;
+  --font-display:'Bricolage Grotesque','Helvetica Neue',Arial,sans-serif;
+  --font-body:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121733; --surface:#1b2145; --fg:#eef0f8; --muted:#a3abc8; --line:#333b66;
+    --accent:#6ec6c1; --accent-soft:#1f3a4a; --sel:#6aa8ff; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121733; --surface:#1b2145; --fg:#eef0f8; --muted:#a3abc8; --line:#333b66;
+  --accent:#6ec6c1; --accent-soft:#1f3a4a; --sel:#6aa8ff; color-scheme:dark;
+}
+body{background:var(--bg);color:var(--fg);font-family:var(--font-body);font-size:15px;line-height:1.55;
+  padding-block:28px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));}
+.wrap{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:22px;min-width:0}
+h1{font-family:var(--font-display);font-weight:700;font-size:clamp(28px,7vw,38px);line-height:1.08;margin:0;text-wrap:balance;letter-spacing:-.01em}
+h2{font-family:var(--font-display);font-weight:500;font-size:19px;margin:0 0 8px;text-wrap:balance}
+p{margin:0}
+.lede{color:var(--muted);max-width:60ch}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+button{font:inherit;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:9px 12px;min-height:40px;cursor:pointer}
+button:hover{border-color:var(--muted)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--sel);outline-offset:2px}
+.seg{flex:1;min-width:92px}
+.seg[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);font-weight:500}
+.frame{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px}
+svg{display:block;width:100%;height:auto;touch-action:manipulation}
+.status{color:var(--muted);font-size:13.5px;min-height:1.5em}
+.sw{display:flex;flex-wrap:wrap;gap:8px}
+.sw button{width:40px;height:40px;min-height:0;padding:0;border-radius:50%}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.row label{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:14px;flex:1;min-width:140px}
+input[type=color]{width:48px;height:40px;padding:2px;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;font-size:14px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-weight:500;color:var(--muted);font-size:12.5px;letter-spacing:.04em;text-transform:uppercase}
+.note{color:var(--muted);font-size:14px;max-width:60ch}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Birds in the Air baby quilt</h1>
+    <p class="lede" style="margin-top:10px">A 3 by 4 block layout, about 36 by 48 inches with 12 inch blocks. White background, scrap fabrics for the large triangle and one small triangle in each block. Tap a colored triangle, then choose a fabric color.</p>
+  </header>
+
+  <section aria-label="Quilt editor" style="display:flex;flex-direction:column;gap:12px">
+    <div class="controls" role="group" aria-label="Block rotation">
+      <button class="seg" id="l0" aria-pressed="true">All same</button>
+      <button class="seg" id="l1" aria-pressed="false">Alternating</button>
+      <button class="seg" id="l2" aria-pressed="false">Pinwheel</button>
+    </div>
+    <div class="frame">
+      <svg id="q" viewBox="0 0 360 480" role="img" aria-label="Baby quilt render"><title>Baby quilt render</title></svg>
+    </div>
+    <p class="status" id="st" aria-live="polite">Tap a colored triangle, then pick a color.</p>
+    <div class="sw" id="sw" role="group" aria-label="Fabric colors"></div>
+    <div class="row">
+      <label>Custom color <input type="color" id="cc" value="#c0506f"></label>
+      <button id="sh" style="flex:1;min-width:140px">Shuffle all colors</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>Cutting sizes</h2>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Block</th><th>Large triangle</th><th>Small triangles</th></tr></thead>
+        <tbody>
+          <tr><td>12 in finished</td><td>12 7/8 in square, cut once</td><td>6 7/8 in squares, cut once</td></tr>
+          <tr><td>6 in finished</td><td>6 7/8 in square, cut once</td><td>3 7/8 in squares, cut once</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note" style="margin-top:10px">Each block uses one large colored triangle, one small colored triangle that pairs with a white one to make the top right half-square triangle, and two more white small triangles. Sizes follow the QuiltGrids Birds in the Air pattern. The 6 in squares in the fabric stack suit the smaller block, which would need about 6 by 8 blocks for a baby quilt.</p>
+  </section>
+</div>
+
+<script>
+var P=['#F3E39B','#E9A6C1','#F5D0D0','#9A2F7C','#6EC6C1','#3C9E99','#1F2A5C','#7088AA','#5D8895','#6B7A3A','#5A78A6'];
+var NAMES=['Yellow','Pink','Light pink','Magenta','Aqua','Teal','Navy','Denim','Slate teal','Olive','Toile blue'];
+var layout=0, seed=7, N=12, sel=null, A=[], B=[];
+function rnd(){seed=(seed*16807)%2147483647;return seed/2147483647;}
+function shuf(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(rnd()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function deck(n){var d=[];while(d.length<n){d=d.concat(shuf(P));}return d.slice(0,n);}
+function reset(){
+  A=deck(N);B=deck(N);
+  for(var k=0;k<N;k++){if(B[k]===A[k])B[k]=P[(P.indexOf(A[k])+3)%P.length];}
+  sel=null;
+}
+function render(){
+  var C=3,R=4,s=60,out='<rect x="0" y="0" width="360" height="480" fill="#fff" stroke="#cfcac0" stroke-width="1"/>';
+  var E='#e3dfd6';
+  for(var j=0;j<R;j++){for(var i=0;i<C;i++){
+    var n=j*C+i,r=0;
+    if(layout===1)r=((i+j)%2)?2:0;
+    if(layout===2)r=[0,1,3,2][(j%2)*2+(i%2)];
+    var tf='translate('+(i*2*s)+','+(j*2*s)+') rotate('+(90*r)+' '+s+' '+s+')';
+    var g='<g transform="'+tf+'">';
+    var wh=['0,0 '+s+',0 '+s+','+s, s+',0 '+2*s+',0 '+2*s+','+s, s+','+s+' '+2*s+','+s+' '+2*s+','+2*s];
+    for(var w=0;w<3;w++)g+='<polygon points="'+wh[w]+'" fill="#fff" stroke="'+E+'" stroke-width="0.6" pointer-events="none"/>';
+    g+='<polygon data-n="'+n+'" data-p="A" points="0,0 0,'+2*s+' '+2*s+','+2*s+'" fill="'+A[n]+'" stroke="'+A[n]+'" stroke-width="0.5" style="cursor:pointer"/>';
+    g+='<polygon data-n="'+n+'" data-p="B" points="'+s+',0 '+s+','+s+' '+2*s+','+s+'" fill="'+B[n]+'" stroke="'+B[n]+'" stroke-width="0.5" style="cursor:pointer"/>';
+    g+='</g>';
+    if(sel&&sel.n===n){
+      var pts=sel.p==='A'?'0,0 0,'+2*s+' '+2*s+','+2*s:s+',0 '+s+','+s+' '+2*s+','+s;
+      g+='<g transform="'+tf+'"><polygon points="'+pts+'" fill="none" stroke="#2f7be0" stroke-width="3" stroke-dasharray="6 4" pointer-events="none"/></g>';
+    }
+    out+=g;
+  }}
+  document.getElementById('q').innerHTML='<title>Baby quilt render</title>'+out;
+  for(var m=0;m<3;m++)document.getElementById('l'+m).setAttribute('aria-pressed',m===layout?'true':'false');
+  var st=document.getElementById('st');
+  if(sel){
+    st.textContent='Editing row '+(Math.floor(sel.n/3)+1)+', column '+((sel.n%3)+1)+': '+(sel.p==='A'?'large triangle':'small triangle')+'. Pick a color.';
+  } else st.textContent='Tap a colored triangle, then pick a color.';
+}
+function setColor(c){
+  if(!sel){document.getElementById('st').textContent='Tap a triangle first, then pick a color.';return;}
+  if(sel.p==='A')A[sel.n]=c;else B[sel.n]=c;
+  render();
+}
+var sw=document.getElementById('sw');
+for(var k=0;k<P.length;k++){(function(k){
+  var b=document.createElement('button');
+  b.style.background=P[k];
+  b.title=NAMES[k];b.setAttribute('aria-label',NAMES[k]);
+  b.onclick=function(){setColor(P[k]);};
+  sw.appendChild(b);
+})(k);}
+var wb=document.createElement('button');
+wb.style.background='#ffffff';wb.title='White';wb.setAttribute('aria-label','White');
+wb.onclick=function(){setColor('#ffffff');};
+sw.appendChild(wb);
+document.getElementById('cc').oninput=function(e){setColor(e.target.value);};
+document.getElementById('q').addEventListener('click',function(e){
+  var t=e.target;
+  if(t.dataset&&t.dataset.p){
+    var n=parseInt(t.dataset.n,10),p=t.dataset.p;
+    if(sel&&sel.n===n&&sel.p===p)sel=null;else sel={n:n,p:p};
+  } else sel=null;
+  render();
+});
+for(var m=0;m<3;m++){(function(m){document.getElementById('l'+m).onclick=function(){layout=m;render();};})(m);}
+document.getElementById('sh').onclick=function(){seed=Math.floor(Math.random()*100000)+1;reset();render();};
+reset();render();
+</script>
+
+</body></html>
